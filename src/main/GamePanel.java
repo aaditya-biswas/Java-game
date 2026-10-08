@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Since modern computers have large 
     final int scale = 3;
     final int FPS = 60;
-    final int tileSize = originalTileSize * scale; // Final tile size
+    public final int tileSize = originalTileSize * scale; // Final tile size
     final int maxScreenCol = 16;
     final int maxScreenRow = 18;
     public final int screenWidth = tileSize * maxScreenCol;
@@ -105,10 +105,9 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g; 
         // Sets a color for drawing objects
         g2.setColor(Color.WHITE);
-        
-        g2.fillRect(playerX, playerY, tileSize,  tileSize);
+        // Draw the player 
+        player.draw(g2);
         // Dispose of graphics Component
-        
         g2.dispose();
     }
 }

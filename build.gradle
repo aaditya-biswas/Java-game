@@ -1,0 +1,17 @@
+apply plugin: 'application'
+
+group = 'com.example'
+version = '1.0.0'
+
+sourceCompatibility = 14
+targetCompatibility = 14
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-source', '14', '-target', '14']
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main', 'src/entity']
+}
+
+mainClassName = 'main.Main'
