@@ -44,19 +44,20 @@ public class Player extends Entity {
         if (!keyH.upPressed && !keyH.downPressed && !keyH.leftPressed && !keyH.rightPressed ) return;
         if (keyH.upPressed == true) {
             direction = "up";
-            y = Math.max(0, y - speed);
+            y = Math.max(-1, y - speed);
+
         }
         else if (keyH.downPressed == true) {
             direction = "down";
-            y = Math.min(gp.screenHeight, y  + speed);
+            y = Math.min(gp.screenHeight - gp.tileSize + 1 , y  + speed);
         }
         else if (keyH.leftPressed == true) {
             direction = "left";
-            x = Math.max(0 , x - speed);
+            x = Math.max(-1 , x - speed);
         }
         else if (keyH.rightPressed == true) {
             direction = "right";
-            x = Math.min(gp.screenWidth , x + speed);
+            x = Math.min(gp.screenWidth - gp.tileSize + 1 , x + speed);
         } 
         spriteCounter++;
         if (spriteCounter % 10 == 0) {
@@ -65,6 +66,7 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
     }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
@@ -86,7 +88,7 @@ public class Player extends Entity {
                 else image = right[1];
                 break;
         }
-        g2.drawImage(image,x,y,gp.tileSize * 4,gp.tileSize * 4,null);
+        g2.drawImage(image,x,y,gp.tileSize  ,gp.tileSize  ,null);
         
     }
 

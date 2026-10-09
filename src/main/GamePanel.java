@@ -5,16 +5,18 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import javax.swing.plaf.DimensionUIResource;
 import entity.Player;
+import tile.TileManager;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
     // SCREEN SETTINGS 
     final int originalTileSize = 16; // 16 * 16 Tile Default size of player character
     // Since modern computers have large 
-    final int scale = 3;
+    final int scale = 4;
     final int FPS = 60;
     public final int tileSize = originalTileSize * scale; // Final tile size
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 18;
+    public final int maxScreenCol = 15;
+    public final int maxScreenRow = 15;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
     // Set the default position 
@@ -26,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread; // Helps in repeating a task
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this,this.keyH);
-    
+    TileManager tileM = new TileManager(this);
     public GamePanel() {
         this.setPreferredSize(new DimensionUIResource(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Improves the game's performance 
         this.setDoubleBuffered(true);
     }
+
 
     public void startGameThread() {
         // Initializes this panel runs in separate to the program
@@ -106,6 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Sets a color for drawing objects
         g2.setColor(Color.WHITE);
         // Draw the player 
+        tileM.draw(g2); 
         player.draw(g2);
         // Dispose of graphics Component
         g2.dispose();
