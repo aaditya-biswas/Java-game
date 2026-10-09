@@ -1,17 +1,53 @@
+// 1. Apply the plugins at the absolute top of the file
+apply plugin: 'java'
 apply plugin: 'application'
 
-group = 'com.example'
-version = '1.0.0'
+// In Gradle 9 the Project-level sourceCompatibility/targetCompatibility were removed.
+// Configure the Java source/target level on the 'java' extension instead.
+java {
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
+}
 
-sourceCompatibility = 14
-targetCompatibility = 14
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs += ['-source', '14', '-target', '14']
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
 
 sourceSets {
-    main.java.srcDirs = ['src/main', 'src/entity']
+    main {
+        // The package declarations are 'main' and 'entity', so the source root
+        // must be the folder that CONTAINS those package folders ('src').
+        // Using 'src/main' / 'src/entity' as roots made the IDE expect the
+        // default package ("") and report a package/path mismatch.
+        java.srcDirs = ['src']
+        resources.srcDirs = ['assets']
+    }
 }
 
-mainClassName = 'main.Main'
+// 'mainClassName' was removed in Gradle 7+; set it via the application extension instead.
+application {
+    mainClass = 'main.Main'
+}
+
+// 3. Tune the JVM/run task for the spawned game process
+tasks.named('run', JavaExec) {
+    // PRIME offload vars: they only affect GLX/OpenGL apps. Java2D uses the X11
+    // pipeline, so these are harmless no-ops here and are kept only for reference.
+    environment '__NV_PRIME_RENDER_OFFLOAD', '1'
+    environment '__GLX_VENDOR_LIBRARY_NAME', 'nvidia'
+    
+    // Explicitly pass through the existing system environment
+    // JavaExec inherits the parent process environment by default, so no need to pass System.env.
+    
+    // Boost allocated RAM and add ZGC/G1 optimizations to stop the 2+ minute compilation stutters
+    jvmArgs = [
+        '-Xms2g', 
+        '-Xmx4g', 
+        '-XX:+UseG1GC',
+        '-XX:+ParallelRefProcEnabled'
+        // NOTE: Do NOT add '-Dsun.java2d.opengl=true' here. On this hybrid
+        // Intel + NVIDIA setup Java2D's OpenGL pipeline renders a blank/white or
+        // garbled window. The default X11 pipeline renders correctly (and is
+        // still GPU-accelerated by the Intel iGPU via XRender).
+    ]
+}

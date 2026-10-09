@@ -18,8 +18,8 @@ public class Main{
 
         window.setLocationRelativeTo(null);
         // We are able to see the window
+        gamePanel.startGameThread();        
         window.setVisible(true);
         gamePanel.requestFocusInWindow();
-        gamePanel.startGameThread();        
     }
 }

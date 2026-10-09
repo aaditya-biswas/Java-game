@@ -1,0 +1,5 @@
+{
+  // Automatically re-import the Gradle project when build.gradle changes.
+  // Without this, the Java Language Server keeps a stale source-root model
+  "java.configuration.updateBuildConfiguration": "automatic"
+}

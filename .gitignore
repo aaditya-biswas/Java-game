@@ -1,2 +1,6 @@
 .gradle/
 build/
+assets/
+# Compiled class files (never commit build output)
+*.class
+src/out/
